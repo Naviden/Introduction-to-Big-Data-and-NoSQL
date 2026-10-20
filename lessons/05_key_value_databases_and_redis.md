@@ -1,4 +1,3 @@
-
 # Focus on Key-Value Databases
 
 ## Key-Value Databases, a recap
@@ -38,21 +37,43 @@ Key-value databases differ from traditional relational databases (RDBMS) in seve
 ## Introduction to Redis
 
 ### What is Redis?
-Redis (Remote Dictionary Server) was made by [Salvatore Sanfilippo](https://en.wikipedia.org/wiki/Salvatore_Sanfilippo) as an open-source, in-memory key-value data store. It is widely used as a database, cache, and message broker. Redis stores data in memory, which allows for extremely fast read and write operations. It is known for its simplicity, flexibility, and support for a wide variety of data structures.
+Redis (Remote Dictionary Server) was created in 2009 by [Salvatore Sanfilippo](https://en.wikipedia.org/wiki/Salvatore_Sanfilippo) as an open-source, in-memory key-value data store. It is widely used as a database, cache, and message broker. Redis stores data in memory, which allows for extremely fast read and write operations. It is known for its simplicity, flexibility, and support for a wide variety of data structures.
 
 ### Key Features of Redis
 - **In-Memory**: Redis stores all data in memory, making it much faster than disk-based databases.
-- **Persistence**: Although it is an in-memory database, Redis supports persistence by saving data to disk periodically.
+- **Persistence**: Although it is an in-memory database, Redis can save data to disk in two ways: **RDB snapshots** (a copy of the whole dataset every few minutes) and the **AOF** (append-only file, a log of every write). You can use one, both, or none (pure cache).
 - **Data Structures**: Redis supports a variety of data types, including strings, lists, sets, sorted sets, hashes, bitmaps, hyperloglogs, and geospatial indexes.
-- **Atomic Operations**: All operations in Redis are atomic, meaning they are completed without the risk of interference from other operations.
+- **Atomic Commands**: Redis executes commands one at a time, so every **single command** (like `INCR` or `HSET`) is atomic: no other client can see it half done. A **sequence** of commands is not atomic by default: another client can run its commands in between. To run several commands as one unit you need a transaction (`MULTI` / `EXEC`) or a Lua script.
 
 ### Redis vs Traditional Key-Value Databases
 While Redis is fundamentally a key-value store, it distinguishes itself from traditional key-value databases in several ways:
 - **Advanced Data Structures**: Redis supports more than just simple key-value pairs. It allows storing more complex data types, which makes it more versatile for different types of applications.
-- **Persistence Options**: Unlike many key-value stores that only operate in memory, Redis offers multiple persistence mechanisms to save data to disk.
+- **Memory First, Disk Optional**: Many key-value stores (like RocksDB or DynamoDB) keep data on disk and use memory as a cache. Redis does the opposite: all the data lives in memory, and the disk is only used as a backup. This makes Redis very fast, but the dataset must fit in RAM. Memcached, another popular in-memory store, has no persistence at all.
 - **Extensibility**: Redis has built-in support for features like transactions, Lua scripting (executing custom scripts directly on the Redis server), and pub/sub messaging (real-time communication), making it a powerful tool for distributed systems.
 
 ### Use Cases for Redis
 - **Caching**: Redis is widely used for caching purposes due to its fast in-memory data access.
 - **Session Management**: Applications can use Redis to store session information, allowing for quick access to user data.
 - **Real-Time Analytics**: Redis is often used in scenarios where low-latency access to data is critical, such as real-time analytics and monitoring systems.
+- **Leaderboards and Counters**: Sorted sets and atomic counters (`INCR`) make rankings and rate limiting very simple.
+
+### A Note on the License
+In 2024 Redis changed its license, and it is no longer open source in the strict sense for some versions. Because of this, part of the community created **Valkey**, an open-source fork of Redis supported by the Linux Foundation. Since Redis 8 (2025), an open-source license (AGPL) is available again. The commands you learn in this course work the same way in Redis and Valkey.
+
+---
+
+## Hands-on
+
+1. [Introduction to Redis with Python](../notebooks/redis/redis_intro.ipynb): basic commands from Python.
+2. [Key-Value Databases: A Practical Case Study](../case-studies/key-value/key_value_databases_case_study.ipynb): Redis vs a relational database on sessions, rate limiting and shopping carts.
+3. [Exercise: storing Wikipedia data in Redis](../notebooks/redis/redis_wikipedia_exercise.ipynb).
+
+If you want to run Redis on your own computer instead of Colab, see the [installation guide](../extra/install_redis_py_guide.md).
+
+---
+
+## Practice
+
+1. Two clients run `GET counter`, add 1 in Python, and then `SET counter` with the new value, at the same time. Starting from 10, what values can `counter` have at the end? How does `INCR` solve the problem?
+2. Your Redis server restarts. Which data would you lose with no persistence, with RDB snapshots every 5 minutes, and with AOF?
+3. Give one example where a key-value store is a bad choice and a relational database is better.

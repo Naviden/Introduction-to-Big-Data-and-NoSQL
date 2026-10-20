@@ -1,10 +1,10 @@
 # Quick Recap of Big Data Definition
 
-Big Data is characterized by the large, fast, and diverse data generated today. To better understand it, we break down Big Data into the **4 V's** that explain the challenges and opportunities it presents.
+Big Data is characterized by the large, fast, and diverse data generated today. To better understand it, we break down Big Data into the **5 V's** that explain the challenges and opportunities it presents.
 
 ---
 
-## The 4 V's of Big Data
+## The 5 V's of Big Data
 
 ### 1. **Volume**
 Refers to the **amount** of data generated. With advancements in digital platforms, sensors, and networks, the scale of data has exploded.
@@ -33,6 +33,15 @@ Refers to the **quality** and reliability of data. With vast amounts of data, no
 - **Example**: In social media sentiment analysis, filtering out fake news or bots is essential to ensure data accuracy.
 
 
+
+### 5. **Value**
+Refers to the **usefulness** of the data. Collecting and storing huge amounts of data has a cost, and it only makes sense if we can turn the data into decisions, products or savings.
+
+- **Example**: A supermarket chain uses loyalty card data to decide which products to put on promotion in each shop. The data has value because it changes a real business decision.
+
+> You may also find versions with more V's (for example **Variability** or **Visualization**). The first three (Volume, Velocity, Variety) come from the original definition by Doug Laney (2001); Veracity and Value were added later and are the most common extensions.
+
+
 ---
 
 ## Real-World Examples of Big Data Use Cases
@@ -52,3 +61,11 @@ Refers to the **quality** and reliability of data. With vast amounts of data, no
 
 5. **Retail and Customer Insights**: Retailers use Big Data to understand consumer behavior and improve the shopping experience.
    - **How It Works**: Data from customer transactions, loyalty programs, and online interactions is analyzed to determine buying patterns and product preferences. This information helps with inventory management, dynamic pricing, and personalized recommendations.
+
+---
+
+## Practice
+
+1. Pick one of the use cases above and describe it using all 5 V's. Which V is the hardest challenge in that case?
+2. A company stores every click on its website "because it might be useful one day", but nobody has ever analyzed it. Which V is missing?
+3. Find an example where Velocity matters more than Volume.

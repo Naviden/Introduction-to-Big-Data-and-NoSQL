@@ -10,7 +10,7 @@ Data storage is essential for managing information efficiently in the digital ag
 ## Key Definitions
 
 ### 1. **Database**
-A **database** is an organized collection of data, generally stored and accessed electronically from a computer system. Databases are designed to store both **structured data** and **unstructured data** in a way that makes retrieval and management easy.
+A **database** is an organized collection of data, generally stored and accessed electronically from a computer system. Databases are designed to make storing, retrieving and updating data easy and safe. The classic relational databases (MySQL, PostgreSQL, ...) store **structured data** in tables, while some NoSQL databases (for example document stores like MongoDB) can also store **semi-structured data** such as JSON.
 
 - **Example**: An online retail store's product catalog.
 - **Usage**: Frequently used in applications requiring transactional operations, like banking or e-commerce.
@@ -25,15 +25,17 @@ A **data warehouse** is a centralized repository that stores large amounts of **
 
 #### Remember: *A data warehouse is not just a pile of databases put together.*
 What makes it a warehouse is that the data is usually:
-	- integrated from different sources
-	- cleaned and transformed
-	- structured for analysis and reporting
-	- often historical (keeps data over time)
+- integrated from different sources
+- cleaned and transformed
+- structured for analysis and reporting
+- often historical (keeps data over time)
+
+The schema of a warehouse is decided **before** the data is loaded. This is called **schema-on-write**: data that does not fit the schema has to be cleaned or transformed first (the classic **ETL** process: Extract, Transform, Load).
 
 ---
 
 ### 3. **Data Mart**
-A **data mart** is a subset of a data warehouse, typically focused on a specific area of business (e.g., marketing, finance). It allows departments to quickly access relevant data without going through the entire database.
+A **data mart** is a subset of a data warehouse, typically focused on a specific area of business (e.g., marketing, finance). It allows departments to quickly access relevant data without going through the entire warehouse.
 
 - **Example**: A company’s marketing team accessing a data mart that holds customer interaction data.
 - **Usage**: Smaller, more specialized, and easier to manage compared to data warehouses.
@@ -41,10 +43,25 @@ A **data mart** is a subset of a data warehouse, typically focused on a specific
 ---
 
 ### 4. **Data Lake**
-A data lake stores data in its raw format. Unlike traditional relational databases and data warehouses, which primarily handle structured data, data lakes can handle **structured**, **semi-structured**, and **unstructured data**. However, some modern databases, like document databases, can also store semi-structured and unstructured data.
+A data lake stores data in its raw format, usually as files in cheap storage (for example HDFS, Amazon S3 or Azure Data Lake Storage). Unlike traditional relational databases and data warehouses, which primarily handle structured data, data lakes can handle **structured**, **semi-structured**, and **unstructured data**. However, some modern databases, like document databases, can also store semi-structured data.
+
+In a data lake the structure is applied only when you read the data. This is called **schema-on-read**, the opposite of the schema-on-write approach of a warehouse.
 
 - **Example**: A social media platform storing user interactions, images, videos, and logs in raw form.
 - **Usage**: Ideal for big data, real-time analytics, and machine learning tasks.
+
+#### Remember: *A data lake without rules becomes a "data swamp".*
+If nobody keeps track of what is stored, where it comes from and how good it is, the lake quickly fills with files that no one can find or trust. Metadata catalogs and clear ownership are what keep a lake usable.
+
+---
+
+### 5. **Data Lakehouse**
+A **data lakehouse** combines the two previous ideas: the data is stored as files in a data lake (cheap, any format), but a table layer on top of the files adds features that used to belong only to warehouses, such as transactions, schemas, and fast SQL queries.
+
+- **Example**: Delta Lake (used by Databricks), Apache Iceberg and Apache Hudi are open table formats used to build lakehouses.
+- **Usage**: Companies that want one copy of the data for both BI reports and machine learning, instead of keeping a lake and a warehouse in sync.
+
+You will meet Delta Lake later in the course, when we save tables in Databricks.
 
 ---
 
@@ -92,10 +109,25 @@ A data lake stores data in its raw format. Unlike traditional relational databas
 
 ## Key Differences at a Glance:
 
-| Feature            | Database       | Data Mart       | Data Warehouse | Data Lake         |
-|--------------------|----------------|-----------------|----------------|-------------------|
-| **Data Type**       | Structured     | Structured      | Structured      | Structured, Semi-structured, Unstructured |
-| **Purpose**         | Transactional  | Specific Dept.  | Business Analytics | Big Data, Machine Learning |
-| **Storage Cost**    | Moderate       | Moderate        | High            | Lower (large-scale raw storage) |
-| **Speed of Access** | Fast           | Fast            | Moderate        | Slower (requires more processing) |
+| Feature            | Database       | Data Mart       | Data Warehouse | Data Lake         | Data Lakehouse |
+|--------------------|----------------|-----------------|----------------|-------------------|----------------|
+| **Data Type**       | Structured     | Structured      | Structured      | Structured, Semi-structured, Unstructured | Structured, Semi-structured, Unstructured |
+| **Schema**          | On write       | On write        | On write        | On read           | On write (tables) + raw files |
+| **Purpose**         | Transactional  | Specific Dept.  | Business Analytics | Big Data, Machine Learning | Analytics and Machine Learning on the same data |
+| **Storage Cost**    | Moderate       | Moderate        | High            | Lower (large-scale raw storage) | Lower (files in a data lake) |
+| **Speed of Access** | Fast           | Fast            | Moderate        | Slower (requires more processing) | Moderate to fast |
+
+---
+
+## Practice
+
+1. For each of the following, say which system (database, data warehouse, data mart, data lake) you would use and why:
+   - the bookings of a hotel chain, updated every time a guest books a room
+   - five years of sales from all the shops of a supermarket chain, used for quarterly reports
+   - the sales numbers that only the marketing team of that supermarket needs
+   - millions of product photos and customer reviews that may be used to train a model in the future
+2. Classify these as structured, semi-structured or unstructured: a CSV of bank transactions, a JSON response from a weather API, a voice message, an HTML page, a log line like `2024-05-10 19:42:27 ERROR disk full`.
+3. What is the difference between schema-on-write and schema-on-read? Give one advantage of each.
+
+Then work through the [University Information System case study](../case-studies/university/README.md).
 

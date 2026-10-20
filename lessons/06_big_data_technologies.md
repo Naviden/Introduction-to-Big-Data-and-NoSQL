@@ -1,4 +1,3 @@
-
 # Big Data Technologies: Spark, Hadoop, MapReduce
 
 In this lesson, we’ll dive into the world of Big Data technologies, focusing on three powerful tools: **Hadoop**, **MapReduce**, and **Apache Spark**. Each of these technologies plays a crucial role in handling large-scale data processing across distributed systems.
@@ -25,7 +24,7 @@ In this lesson, we’ll dive into the world of Big Data technologies, focusing o
    - A data warehouse tool that provides SQL-like query capabilities on top of Hadoop.
    
 5. **Pig**:
-   - Apache Pig is a high-level platform for processing and analyzing large datasets within the Hadoop ecosystem, using a scripting language known as **Pig Latin**, as Pig Latin scripts are automatically translated into sequences of MapReduce jobs, enabling efficient execution on Hadoop clusters. The name was chosen because, much like a pig that can consume a wide variety of foods, Apache Pig is designed to handle any kind of data, whether structured, semi-structured, or unstructured. This flexibility allows users to process diverse datasets without concern for their format [(source)](https://www.guru99.com/introduction-to-pig-and-hive.html).
+   - Apache Pig is a high-level platform for processing and analyzing large datasets within the Hadoop ecosystem. It uses a scripting language called **Pig Latin**, and Pig Latin scripts are automatically translated into sequences of MapReduce jobs that run on the Hadoop cluster. The name was chosen because, much like a pig that can consume a wide variety of foods, Apache Pig is designed to handle any kind of data, whether structured, semi-structured, or unstructured. This flexibility allows users to process diverse datasets without concern for their format [(source)](https://www.guru99.com/introduction-to-pig-and-hive.html). Today Pig is rarely used for new projects: Spark and SQL engines like Hive have mostly replaced it.
 
 ---
 
@@ -45,11 +44,11 @@ In a Hadoop ecosystem, the **map tasks** are executed by **different nodes** in 
 
 **Example**:  
 Suppose we want to count the occurrences of each word in a text.
-```   Example: 
-Input: “cat dog dog cat”
+```
+Input: "cat dog dog cat"
 
 Output from map:
-(“cat”, 1), (“dog”, 1), (“dog”, 1), (“cat”, 1)
+("cat", 1), ("dog", 1), ("dog", 1), ("cat", 1)
 ```
 #### 2. **Shuffle and Sort Phase**
 - **Objective**: Group all values associated with the same key together and ensure they are sorted.
@@ -58,8 +57,8 @@ Output from map:
   - Keys are grouped, and their corresponding values are collected together for each unique key.
 
 **Intermediate Output**:
-```   Example: 
-(“cat”, [1, 1]), (“dog”, [1, 1])
+```
+("cat", [1, 1]), ("dog", [1, 1])
 ```
 ##### TLDR
 The **shuffle phase** ensures that all values for a given key are grouped and sorted, enabling reducers to process the data accurately and efficiently.
@@ -71,17 +70,17 @@ The **shuffle phase** ensures that all values for a given key are grouped and so
 
 **Example**:  
 For our word count example:
-```   Example: 
-Input to reduce: (“cat”, [1, 1]), (“dog”, [1, 1])
+```
+Input to reduce: ("cat", [1, 1]), ("dog", [1, 1])
 
 Output from reduce:
-(“cat”, 2), (“dog”, 2)
+("cat", 2), ("dog", 2)
 ```
 ### Final Result
 The output of the reduce phase gives the desired result: the total count of each word in the input text.
-```   Example: 
+```
 Final Output:
-(“cat”, 2), (“dog”, 2)
+("cat", 2), ("dog", 2)
 ```
 ### Key Takeaways
 - **Map Phase**: Transforms raw data into intermediate key-value pairs.
@@ -115,9 +114,9 @@ This structured approach allows for efficient, parallel processing of large data
 ### 2. **Spark**
 - **Description**: An in-memory distributed computing framework that provides faster data processing than MapReduce.
 - **Strengths**:
-  - **In-Memory Processing**: Spark keeps intermediate data in memory, reducing the need for disk I/O and significantly improving performance.
+  - **In-Memory Processing**: Spark keeps intermediate data in memory whenever possible, reducing the need for disk I/O and significantly improving performance. (Spark still writes to disk during a shuffle, and when the data does not fit in memory.)
   - **Versatile APIs**: Supports a wide range of languages (Scala, Python, Java, R) and provides high-level APIs for data processing.
-  - **Broad Use Cases**: Spark can handle batch processing, real-time streaming (Spark Streaming), machine learning (MLlib), and graph processing (GraphX).
+  - **Broad Use Cases**: Spark can handle batch processing, near real-time streaming (Structured Streaming), machine learning (MLlib), and graph processing (GraphX in Scala, or the GraphFrames package in Python).
   - **Iterative Computations**: Ideal for algorithms that require multiple passes over the same data, such as machine learning and graph algorithms.
   
 - **Limitations**:
@@ -135,7 +134,7 @@ This structured approach allows for efficient, parallel processing of large data
 | **Ease of Use**             | Low-level API, harder to code        | High-level API, easier to code         |
 | **Use Cases**               | Batch jobs                           | Batch, Streaming, Machine Learning     |
 | **Fault Tolerance**         | High (reruns failed tasks)           | High (via lineage and DAG recovery)    |
-| **Language Support**        | Java                                 | Scala, Python, Java, R                 |
+| **Language Support**        | Java (other languages through Hadoop Streaming) | Scala, Python, Java, R, SQL   |
 | **Resource Efficiency**     | Lower memory requirements            | Higher memory usage                    |
 
 ---
@@ -152,6 +151,8 @@ This structured approach allows for efficient, parallel processing of large data
   - For simple, batch-oriented tasks where performance is less critical.
   - When you need a proven and highly stable framework.
 
+In practice, almost all new projects use Spark (or similar engines). MapReduce is still worth learning because the same ideas (map, shuffle, reduce) are behind how Spark works, and you will find it in older Hadoop systems.
+
 ---
 
 ### TLDR
@@ -163,5 +164,16 @@ Spark and MapReduce are both powerful tools for distributed data processing, but
 - **Spark SQL**:
   - A module for working with structured data using SQL queries.
   
-- **Spark Streaming**:
-  - A tool for real-time data processing, capable of handling streaming data (e.g., from Kafka or Flume).
+- **DataFrames**:
+  - A distributed table with named columns, built on top of RDDs. This is the API you will use most of the time, and the one we use in the next lessons.
+
+- **Structured Streaming**:
+  - The streaming engine of Spark. You write the same DataFrame code you would write for a batch job, and Spark runs it on data that keeps arriving (e.g., from Apache Kafka or from new files landing in a folder). It replaces the older **Spark Streaming** (DStreams) API, which is now considered legacy.
+
+---
+
+## Practice
+
+1. Write the output of the map, shuffle and reduce phases for the word count of the text `"big data is big and data is fast"`.
+2. Why is MapReduce slow for an algorithm that needs to read the same data 20 times (for example, training a machine learning model)? Why is Spark faster in this case?
+3. In the word count example, which phase needs to move data between the nodes of the cluster? Why is this the most expensive phase?

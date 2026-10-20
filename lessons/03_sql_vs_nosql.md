@@ -1,5 +1,4 @@
-
-# SQL vs. No-SQL (Focus on Key-Value and Columnar No-SQL Databases)
+# SQL vs. No-SQL (Focus on Key-Value and Column-Family No-SQL Databases)
 
 In this lesson, we’ll explore the differences between **SQL** (relational) and **No-SQL** (non-relational) databases, with a focus on two types of No-SQL databases: **key-value stores** and **column-family stores**. Understanding when and why to use each can be critical for building scalable applications.
 
@@ -27,7 +26,7 @@ In this lesson, we’ll explore the differences between **SQL** (relational) and
 
 ## No-SQL Databases: A Flexible Approach
 
-**No-SQL** databases offer more flexibility in storing and retrieving data, making them ideal for unstructured or semi-structured data. They do not rely on fixed schemas and can scale horizontally, making them suitable for handling massive datasets.
+**No-SQL** databases offer more flexibility in storing and retrieving data, making them a good fit for semi-structured data and for data whose structure changes often. They do not rely on fixed schemas and are usually designed to scale horizontally, making them suitable for handling massive datasets.
 
 No-SQL databases are classified into several types. In this lesson, we’ll focus on:
 
@@ -51,16 +50,20 @@ In practice, retrieving data from a key-value store is quick and efficient becau
 
 ---
 
-### 2. **Column-Family Stores**
-Column-family databases store data in columns rather than rows. Data is grouped by columns, which allows for efficient retrieval of specific subsets of data.
+### 2. **Column-Family Stores (Wide-Column Stores)**
+Column-family databases organize data in **rows identified by a key**, where each row can have a different set of columns. Related columns are grouped together in a **column family**. You can think of it as a two-level map: `row key -> (column name -> value)`.
 
 #### Characteristics:
-- **Column-Oriented**: Data is stored in columns (not rows), allowing you to query specific columns across a large dataset.
-- **High Performance**: Optimized for read and write performance across distributed systems.
-- **Best For**: Applications that require fast access to large datasets, like time-series data or event logging.
+- **Flexible Rows**: Two rows in the same table do not need to have the same columns, and a single row can hold thousands of columns (this is why they are also called **wide-column** stores).
+- **Partitioned by Key**: Rows are spread across many nodes based on their key, so reading or writing a row by its key is fast even with billions of rows.
+- **High Write Throughput**: Optimized for very fast writes across distributed systems.
+- **Best For**: Applications that write a lot of data and read it back by key, like time-series data or event logging.
 
 #### Example:
-- **Apache Cassandra**: A widely-used column-family store, known for its scalability and fault tolerance across distributed systems.
+- **Apache Cassandra**: A widely-used column-family store, known for its scalability and fault tolerance across distributed systems. Other examples are Apache HBase and Google Bigtable.
+
+#### Remember: *column-family is not the same as columnar.*
+The name is confusing. A **columnar** format (like Parquet) or a columnar database (like ClickHouse) physically stores all the values of one column together, which makes analytical queries such as "average price of all products" very fast. A **column-family** store like Cassandra is still built around rows: the data of one row key is stored together. The word "column" refers to the flexible columns inside each row, not to how the data sits on disk.
 
 #### How It Works:
 ```
@@ -71,7 +74,7 @@ Name: Alice
 Age: 29
 Email: alice@example.com
 ```
-In column-family stores, data is grouped by column families, making it efficient to query related data across large volumes of data.
+In column-family stores, the row key (`user123`) decides on which node the row lives, and the columns inside the row can differ from one user to another. Queries are fast when they look up data by key.
 
 ---
 
@@ -92,8 +95,8 @@ In column-family stores, data is grouped by column families, making it efficient
 | Feature               | SQL (Relational)                     | No-SQL (Non-Relational)                 |
 |-----------------------|--------------------------------------|-----------------------------------------|
 | **Data Structure**     | Structured, Schema-Based            | Unstructured/Semi-Structured, Flexible  |
-| **Scaling**            | Vertical (single server)            | Horizontal (multiple servers/nodes)     |
-| **ACID Compliance**    | Yes (ACID transactions)             | Depends on the No-SQL type (BASE model) |
+| **Scaling**            | Mostly vertical (bigger server); horizontal scaling is possible but harder | Horizontal (multiple servers/nodes)     |
+| **Consistency Model**  | ACID transactions                   | Often BASE (eventual consistency); some offer ACID for single records or transactions |
 | **Best For**           | Complex Queries, Transactions       | Scalability, Large Data, Flexibility    |
 | **Examples**           | MySQL, PostgreSQL                   | Redis, Cassandra, MongoDB               |
 
@@ -103,3 +106,45 @@ In addition to key-value and columnar databases, here are a few more types of No
 
 - **Document Stores**: These databases store data as JSON-like documents. Examples include MongoDB and CouchDB. They are suitable for applications requiring flexible and hierarchical data structures.
 - **Graph Databases**: Designed to handle data with complex relationships, graph databases store entities as nodes and relationships as edges. Neo4j and Amazon Neptune are popular examples.
+
+You will see examples of both in the [next lesson](04_nosql_types.md).
+
+---
+
+## CAP Theorem and BASE
+
+When data is spread over many servers (nodes), the network between them can fail. The **CAP theorem** says that a distributed database can guarantee at most two of these three properties at the same time:
+
+- **Consistency (C)**: every read gets the most recent write (all nodes see the same data).
+- **Availability (A)**: every request gets an answer, even if some nodes are down.
+- **Partition tolerance (P)**: the system keeps working even if the network splits the nodes into groups that cannot talk to each other.
+
+In a real distributed system network problems will happen, so **P is not optional**. The real choice is what to do during a network partition:
+
+- **CP systems** refuse some requests to stay consistent (for example HBase, MongoDB with default settings).
+- **AP systems** keep answering, even if some answers may be a little out of date (for example Cassandra, DynamoDB with default settings).
+
+Note that the "C" in CAP is not the same as the "C" in ACID. In ACID, consistency means that a transaction respects the rules of the database (constraints, foreign keys, ...).
+
+### BASE
+Many NoSQL databases choose availability and describe their behavior with **BASE**, which is the "relaxed" counterpart of ACID:
+
+- **Basically Available**: the system answers as long as possible, even during failures.
+- **Soft state**: the state of the data can change over time, even without new writes, while nodes synchronize.
+- **Eventually consistent**: if no new writes arrive, all nodes will eventually hold the same data.
+
+**Example**: you change your profile picture on a social network. For a few seconds a friend in another country may still see the old picture. This is eventual consistency, and for a profile picture it is perfectly acceptable. For a bank transfer it would not be, which is why banks use ACID databases.
+
+Many modern systems let you tune this. In Cassandra, for example, you can choose for each query how many replicas must answer (`ONE`, `QUORUM`, `ALL`), trading speed for consistency.
+
+---
+
+## Practice
+
+1. For each case, choose SQL or NoSQL (and which NoSQL type) and explain why:
+   - a bank's account balances
+   - the shopping cart of an online shop with millions of visitors
+   - temperature readings sent every second by 100,000 sensors
+2. Explain with your own words why "column-family" and "columnar" are not the same thing.
+3. A ticket booking website must never sell the same seat twice. Would you prefer a CP or an AP system? What about a "likes" counter on a video?
+
