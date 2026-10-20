@@ -7,6 +7,7 @@ _3_Traditional vs. Big Data Approaches.md
 # instructor solutions not meant for the public repository
 Spark_Pipeline_Project.ipynb
 case_study_redis_wikipedia.ipynb
+*_solution.ipynb
 
 # Python / Jupyter
 .venv/

@@ -40,6 +40,5 @@ jobs:
           notebooks/parquet/columnar_parquet.ipynb
           notebooks/spark/salary_analysis_functions.ipynb
           notebooks/spark/session_data_practice.ipynb
-          notebooks/spark/airbnb_pipeline_project_solution.ipynb
           case-studies/retail/retail_case_study.ipynb
           case-studies/key-value/key_value_databases_case_study.ipynb
