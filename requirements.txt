@@ -1,0 +1,17 @@
+# Redis notebooks and key-value case study
+redis>=5.0
+fakeredis>=2.20
+requests
+beautifulsoup4
+
+# Parquet notebook
+pandas>=2.0,<3
+pyarrow
+openpyxl
+matplotlib
+
+# Spark notebooks (outside Databricks; needs Java 17+)
+pyspark>=3.5
+
+# Running notebooks locally
+jupyter

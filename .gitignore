@@ -1,6 +1,23 @@
-Spark_Pipeline_Project.ipynb
+# personal notes
 for_me.md
-_3_Traditional vs. Big Data Approaches.md
 link.md
+_3_Traditional vs. Big Data Approaches.md
 *.png
+
+# instructor solutions not meant for the public repository
+Spark_Pipeline_Project.ipynb
 case_study_redis_wikipedia.ipynb
+
+# Python / Jupyter
+.venv/
+venv/
+__pycache__/
+.ipynb_checkpoints/
+
+# files created when running the notebooks
+users_info.*
+spark-warehouse/
+metastore_db/
+derby.log
+
+.DS_Store

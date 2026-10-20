@@ -1,0 +1,8 @@
+# Removes the outputs of the student notebooks before each commit,
+# so that students don't see the results before doing the exercises.
+repos:
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.8.1
+    hooks:
+      - id: nbstripout
+        files: ^notebooks/(spark/airbnb_pipeline_project|redis/redis_wikipedia_exercise)\.ipynb$
