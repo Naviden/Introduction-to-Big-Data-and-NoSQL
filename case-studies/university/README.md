@@ -1,4 +1,3 @@
-
 # Case Study: University Information System
 
 ## Objective
@@ -30,3 +29,7 @@ Imagine that you are part of a data management team at a large university. The u
 1. **Database Usage**: What advantages does a database provide for managing structured student records compared to other storage systems?
 2. **Data Mart Application**: How does a data mart improve efficiency for department-specific reporting, and what are some potential limitations?
 3. **Data Lake Benefits**: Discuss why a data lake is suitable for storing diverse research data and the challenges that may come with managing and analyzing this unstructured data.
+
+---
+
+This case study goes with [Lesson 1: Basic Definitions](../../lessons/01_basic_definitions.md).

@@ -25,7 +25,7 @@ It simulates data from a small retail chain with multiple stores, products, and 
 
 ### 4. Transactions
 - **Rows:** ~3,500 (+ some duplicates)  
-- **Fields:** transaction_id, transaction_ts, store_id, customer_id, product_id, quantity, unit_price, discount_pct, payment_method, channel, review_rating, promo_meta_json, pre_tax_amount, tax_rate, total_amount, is_returned  
+- **Fields:** transaction_id, transaction_ts, store_id, customer_id, product_id, quantity, unit_price, discount_pct, payment_method, channel, review_rating, promo_meta_json, is_returned, pre_tax_amount, tax_rate, tax_amount, total_amount  
 - Simulates sales transactions across all stores and channels.  
 - Includes **JSON column (`promo_meta_json`)** with campaign details, **missing values**, **duplicates**, and a few **outliers** for data cleaning practice.
 
@@ -40,8 +40,19 @@ It simulates data from a small retail chain with multiple stores, products, and 
 
 By working with this dataset in **Databricks (PySpark)**, students will:
 
-1. **Load and inspect data** from CSV or Excel files.
+1. **Load and inspect data** from CSV files.
 2. **Clean data:** handle missing values, duplicates, and outliers.
 3. **Transform data:** cast types, parse JSON, derive metrics, and join dimension tables.
 4. **Aggregate and analyse:** compute KPIs (monthly revenue, top products, loyalty tier impact).
 5. **Apply window functions** and **UDFs** for advanced analytics.
+6. **Save the results** as Delta tables.
+
+---
+
+## How to Run It
+
+1. Open Databricks Free Edition (see [Lesson 7](../../lessons/07_spark_basics_part1.md) for the setup).
+2. Import the notebook [`retail_case_study.ipynb`](retail_case_study.ipynb) into your workspace.
+3. Run the cells from top to bottom. The data is read directly from the [`data/retail/`](../../data/retail/) folder of this repository, so you don't need to upload anything.
+
+The notebook also runs on a local PySpark installation (`pip install pyspark pandas`) or on Google Colab: the first cell takes care of the differences.
