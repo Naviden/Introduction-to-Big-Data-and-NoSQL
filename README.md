@@ -8,7 +8,7 @@ The course focuses on the following areas:
 
 - Basic concepts and definitions related to Big Data, such as databases, data warehouses, data marts, data lakes and lakehouses.
 - The 5 V's of Big Data (Volume, Velocity, Variety, Veracity, and Value).
-- Introduction and comparison of SQL and NoSQL databases, the CAP theorem and BASE, with an emphasis on key-value and column-family NoSQL databases.
+- Introduction and comparison of SQL and NoSQL databases, with an emphasis on key-value and column-family NoSQL databases.
 - Hands-on practice with Redis, a key-value database.
 - Big Data technologies: Apache Hadoop, MapReduce, and Apache Spark.
 - Practical exercises in Apache Spark using Databricks, covering filtering, transformations, joins, aggregations, window functions, and working with both DataFrames and RDDs.
@@ -19,7 +19,7 @@ The course focuses on the following areas:
 |---|--------|----------|------|
 | 1 | [Basic Definitions](lessons/01_basic_definitions.md) | [University Information System case study](case-studies/university/README.md) | 1 h |
 | 2 | [Big Data Definition (the 5 V's)](lessons/02_big_data_definition.md) | | 20 min |
-| 3 | [SQL vs. NoSQL, CAP and BASE](lessons/03_sql_vs_nosql.md) | | 1 h |
+| 3 | [SQL vs. NoSQL](lessons/03_sql_vs_nosql.md) | | 1 h |
 | 4 | [NoSQL Database Types](lessons/04_nosql_types.md) | [Columnar formats: Parquet](notebooks/parquet/columnar_parquet.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Naviden/Introduction-to-Big-Data-and-NoSQL/blob/main/notebooks/parquet/columnar_parquet.ipynb) | 1 h |
 | 5 | [Key-Value Databases and Redis](lessons/05_key_value_databases_and_redis.md) | [Redis intro](notebooks/redis/redis_intro.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Naviden/Introduction-to-Big-Data-and-NoSQL/blob/main/notebooks/redis/redis_intro.ipynb)<br>[Key-value case study](case-studies/key-value/key_value_databases_case_study.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Naviden/Introduction-to-Big-Data-and-NoSQL/blob/main/case-studies/key-value/key_value_databases_case_study.ipynb)<br>[Exercise: Wikipedia data in Redis](notebooks/redis/redis_wikipedia_exercise.ipynb) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Naviden/Introduction-to-Big-Data-and-NoSQL/blob/main/notebooks/redis/redis_wikipedia_exercise.ipynb) | 2 h |
 | 6 | [Big Data Technologies: Hadoop, MapReduce, Spark](lessons/06_big_data_technologies.md) | [MapReduce in Python](https://github.com/Naviden/MapReduceExample/blob/main/Mapreduce%20Example.ipynb) | 1 h |

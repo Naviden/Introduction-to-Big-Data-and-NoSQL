@@ -90,44 +90,17 @@ In column-family stores, the row key (`user123`) decides on which node the row l
 |-----------------------|--------------------------------------|-----------------------------------------|
 | **Data Structure**     | Structured, Schema-Based            | Unstructured/Semi-Structured, Flexible  |
 | **Scaling**            | Mostly vertical (bigger server); horizontal scaling is possible but harder | Horizontal (multiple servers/nodes)     |
-| **Consistency Model**  | Strong consistency, transactions    | Often BASE (eventual consistency); some also offer transactions |
 | **Best For**           | Complex Queries, Transactions       | Scalability, Large Data, Flexibility    |
 | **Examples**           | MySQL, PostgreSQL                   | Redis, Cassandra, MongoDB               |
 
 ### Other Types of NoSQL Databases
 
-In addition to key-value and columnar databases, here are a few more types of NoSQL databases:
+In addition to key-value and column-family databases, here are a few more types of NoSQL databases:
 
 - **Document Stores**: These databases store data as JSON-like documents. Examples include MongoDB and CouchDB. They are suitable for applications requiring flexible and hierarchical data structures.
 - **Graph Databases**: Designed to handle data with complex relationships, graph databases store entities as nodes and relationships as edges. Neo4j and Amazon Neptune are popular examples.
 
 You will see examples of both in the [next lesson](04_nosql_types.md).
-
----
-
-## CAP Theorem and BASE
-
-When data is spread over many servers (nodes), the network between them can fail. The **CAP theorem** says that a distributed database can guarantee at most two of these three properties at the same time:
-
-- **Consistency (C)**: every read gets the most recent write (all nodes see the same data).
-- **Availability (A)**: every request gets an answer, even if some nodes are down.
-- **Partition tolerance (P)**: the system keeps working even if the network splits the nodes into groups that cannot talk to each other.
-
-In a real distributed system network problems will happen, so **P is not optional**. The real choice is what to do during a network partition:
-
-- **CP systems** refuse some requests to stay consistent (for example HBase, MongoDB with default settings).
-- **AP systems** keep answering, even if some answers may be a little out of date (for example Cassandra, DynamoDB with default settings).
-
-### BASE
-Many NoSQL databases choose availability and describe their behavior with **BASE**, which means accepting a more relaxed form of consistency:
-
-- **Basically Available**: the system answers as long as possible, even during failures.
-- **Soft state**: the state of the data can change over time, even without new writes, while nodes synchronize.
-- **Eventually consistent**: if no new writes arrive, all nodes will eventually hold the same data.
-
-**Example**: you change your profile picture on a social network. For a few seconds a friend in another country may still see the old picture. This is eventual consistency, and for a profile picture it is perfectly acceptable. For a bank transfer it would not be, which is why banks use databases with strong consistency.
-
-Many modern systems let you tune this. In Cassandra, for example, you can choose for each query how many replicas must answer (`ONE`, `QUORUM`, `ALL`), trading speed for consistency.
 
 ---
 
@@ -138,5 +111,4 @@ Many modern systems let you tune this. In Cassandra, for example, you can choose
    - the shopping cart of an online shop with millions of visitors
    - temperature readings sent every second by 100,000 sensors
 2. Explain with your own words why "column-family" and "columnar" are not the same thing.
-3. A ticket booking website must never sell the same seat twice. Would you prefer a CP or an AP system? What about a "likes" counter on a video?
 

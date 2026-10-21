@@ -126,7 +126,7 @@ When choosing between different types of No-SQL databases, it’s important to u
    - **Column-Family**: Very high write throughput, and efficient reads of a range of rows inside one partition (for example the last hour of data of one sensor).
 
 3. **Scalability and Availability**: 
-   - Both key-value and column-family databases scale horizontally. Cassandra is designed to keep working when nodes fail (it favors **availability**, see the CAP theorem in [Lesson 3](03_sql_vs_nosql.md)), and you can tune how much consistency you want for each query. Redis is usually used as a single node or a small cluster, with the data kept in memory.
+   - Both key-value and column-family databases scale horizontally. Cassandra is designed to keep working when nodes fail, because every row is copied on several nodes. Redis is usually used as a single node or a small cluster, with the data kept in memory.
 
 4. **Use Case**: 
    - **Key-Value (e.g., Redis)**: Great for caching, session storage, and real-time analytics.
