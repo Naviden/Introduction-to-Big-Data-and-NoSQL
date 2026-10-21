@@ -10,13 +10,7 @@ In this lesson, we’ll explore the differences between **SQL** (relational) and
 
 ### Characteristics of SQL Databases:
 - **Schema-Based**: Data must follow a predefined schema with a clear structure (tables with rows and columns).
-- **ACID Compliance**: SQL databases ensure **Atomicity, Consistency, Isolation, and Durability**, making them ideal for applications requiring complex transactions.
-  
-  - *Atomicity*: Ensures that a transaction is all-or-nothing; either all operations succeed, or none are applied.  
-  - *Consistency*: Guarantees that a transaction transforms the database from one valid state to another, maintaining data integrity.
-  - *Isolation*: Ensures that concurrent transactions do not interfere with each other, producing the same result as if they were executed sequentially.
-  - *Durability*: Ensures that once a transaction is committed, the changes are permanent, even in the event of a system failure.
-  
+- **Transactions**: several changes can be grouped so that they all happen or none does (for example, money leaves one account and arrives in another), which makes relational databases a good fit for applications where data must always be exact.
 - **Relational**: Data is often linked using keys (primary and foreign keys) to maintain relationships between tables.
 
 #### Example:
@@ -96,7 +90,7 @@ In column-family stores, the row key (`user123`) decides on which node the row l
 |-----------------------|--------------------------------------|-----------------------------------------|
 | **Data Structure**     | Structured, Schema-Based            | Unstructured/Semi-Structured, Flexible  |
 | **Scaling**            | Mostly vertical (bigger server); horizontal scaling is possible but harder | Horizontal (multiple servers/nodes)     |
-| **Consistency Model**  | ACID transactions                   | Often BASE (eventual consistency); some offer ACID for single records or transactions |
+| **Consistency Model**  | Strong consistency, transactions    | Often BASE (eventual consistency); some also offer transactions |
 | **Best For**           | Complex Queries, Transactions       | Scalability, Large Data, Flexibility    |
 | **Examples**           | MySQL, PostgreSQL                   | Redis, Cassandra, MongoDB               |
 
@@ -124,16 +118,14 @@ In a real distributed system network problems will happen, so **P is not optiona
 - **CP systems** refuse some requests to stay consistent (for example HBase, MongoDB with default settings).
 - **AP systems** keep answering, even if some answers may be a little out of date (for example Cassandra, DynamoDB with default settings).
 
-Note that the "C" in CAP is not the same as the "C" in ACID. In ACID, consistency means that a transaction respects the rules of the database (constraints, foreign keys, ...).
-
 ### BASE
-Many NoSQL databases choose availability and describe their behavior with **BASE**, which is the "relaxed" counterpart of ACID:
+Many NoSQL databases choose availability and describe their behavior with **BASE**, which means accepting a more relaxed form of consistency:
 
 - **Basically Available**: the system answers as long as possible, even during failures.
 - **Soft state**: the state of the data can change over time, even without new writes, while nodes synchronize.
 - **Eventually consistent**: if no new writes arrive, all nodes will eventually hold the same data.
 
-**Example**: you change your profile picture on a social network. For a few seconds a friend in another country may still see the old picture. This is eventual consistency, and for a profile picture it is perfectly acceptable. For a bank transfer it would not be, which is why banks use ACID databases.
+**Example**: you change your profile picture on a social network. For a few seconds a friend in another country may still see the old picture. This is eventual consistency, and for a profile picture it is perfectly acceptable. For a bank transfer it would not be, which is why banks use databases with strong consistency.
 
 Many modern systems let you tune this. In Cassandra, for example, you can choose for each query how many replicas must answer (`ONE`, `QUORUM`, `ALL`), trading speed for consistency.
 
