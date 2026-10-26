@@ -70,18 +70,18 @@ Hadoop does the two jobs we just saw with two separate programs, each with its o
 
 ```mermaid
 flowchart TB
-    NN["<b>NameNode</b> (HDFS master)<br/>knows where every block is"]
-    RM["<b>ResourceManager</b> (YARN master)<br/>decides who runs which task"]
+    NN["<b>Master machine</b><br/>runs the <b>NameNode</b> (HDFS master):<br/>knows where every block is"]
+    RM["<b>Master machine</b><br/>runs the <b>ResourceManager</b> (YARN master):<br/>decides who runs which task"]
     NN -.-|"storage"| workers
     RM ---|"processing"| workers
-    subgraph workers["Worker machines: each one runs a DataNode and a NodeManager"]
-        W1["<b>Worker</b><br/>DataNode: stores blocks<br/>NodeManager: runs tasks"]
-        W2["<b>Worker</b><br/>DataNode: stores blocks<br/>NodeManager: runs tasks"]
-        W3["<b>Worker</b><br/>DataNode: stores blocks<br/>NodeManager: runs tasks"]
+    subgraph workers["Worker machines"]
+        W1["<b>Worker machine</b><br/>runs two programs:<br/>DataNode (stores blocks)<br/>NodeManager (runs tasks)"]
+        W2["<b>Worker machine</b><br/>runs two programs:<br/>DataNode (stores blocks)<br/>NodeManager (runs tasks)"]
+        W3["<b>Worker machine</b><br/>runs two programs:<br/>DataNode (stores blocks)<br/>NodeManager (runs tasks)"]
     end
 ```
 
-So every worker machine runs both a DataNode and a NodeManager: that's why a task can run on the same machine where its block is stored. In real clusters the masters also have a standby copy, ready to take over if they fail.
+Despite the names, NameNode, DataNode, ResourceManager and NodeManager are **programs**, not machines. Every worker machine runs both a DataNode and a NodeManager: that's why a task can run on the same machine where its block is stored. In a small cluster the two master programs often run on the same machine; in a real cluster each one runs on its own machine, with a standby copy on another machine, ready to take over if it fails.
 
 #### TLDR
 A big file is **split into blocks**, every block is **copied on several machines**, the **master knows where everything is**, and the work is **sent to the machines that hold the data**, which all work in parallel.
