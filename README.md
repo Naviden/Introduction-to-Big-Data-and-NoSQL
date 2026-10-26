@@ -11,7 +11,7 @@ The course focuses on the following areas:
 - Introduction and comparison of SQL and NoSQL databases, with an emphasis on key-value and column-family NoSQL databases.
 - Hands-on practice with Redis, a key-value database.
 - Big Data technologies: Apache Hadoop, MapReduce, and Apache Spark.
-- Practical exercises in Apache Spark using Databricks, covering filtering, transformations, joins, aggregations, window functions, and working with both DataFrames and RDDs.
+- Practical exercises in Apache Spark using Databricks, covering filtering, transformations, joins, aggregations, window functions, with DataFrames (RDDs are only introduced, not practised).
 
 ## Syllabus
 

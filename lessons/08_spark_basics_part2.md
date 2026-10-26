@@ -133,6 +133,14 @@ df_customers.select("customer_id", "name").show()
 
 ### Spark RDDs (Resilient Distributed Datasets)
 
+> [!NOTE]
+> **Why this course does not practise RDDs.** RDDs were Spark's first API, and DataFrames are built on top of them, so it is good to know what they are. But today they are rarely used directly:
+> - Spark can **optimize** DataFrame and SQL code (with the Catalyst engine), while RDD code runs exactly as you write it, which is usually slower, especially from Python.
+> - New Spark features, like Structured Streaming and the main machine learning API, are built on DataFrames.
+> - On **Databricks Free Edition**, the platform of this course, the RDD API is not available at all.
+>
+> So this section only shows what an RDD looks like; all the exercises use DataFrames.
+
 RDDs are the underlying distributed data structure in Spark and provide more control over data manipulation but are less optimized than DataFrames.
 
 #### Key Features:
@@ -149,7 +157,7 @@ rdd_mapped = rdd.map(lambda x: (x[0], x[1] + 10))  # Add 10 to each age
 rdd_mapped.collect()
 ```
 
-> **Note:** On Databricks Free Edition (serverless compute) the RDD API and `spark.sparkContext` are **not available**. You can run this example locally (`pip install pyspark`) or in Google Colab. This is another sign that DataFrames are the API to use in practice.
+> To try this example, run it locally (`pip install pyspark`) or in Google Colab: on Databricks Free Edition `spark.sparkContext` is not available.
 
 ---
 
