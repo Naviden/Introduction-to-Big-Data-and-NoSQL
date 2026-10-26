@@ -25,19 +25,22 @@ Imagine a 512 MB file of sales, `sales.log`. Instead of saving it on one machine
 ```mermaid
 flowchart TB
     file["sales.log (512 MB)"] -->|"split into 4 blocks of 128 MB"| blocks["B1, B2, B3, B4"]
-    blocks -->|"each block is copied on 3 workers"| workers
-    master["Master node<br/>B1: workers 1, 2, 3<br/>B2: workers 1, 3, 4<br/>B3: workers 2, 3, 4<br/>B4: workers 1, 2, 4"] -.-|"knows where each block is"| workers
-    subgraph workers["Worker nodes"]
-        W1["Worker 1<br/>B1 B2 B4"]
-        W2["Worker 2<br/>B1 B3 B4"]
-        W3["Worker 3<br/>B1 B2 B3"]
-        W4["Worker 4<br/>B2 B3 B4"]
-    end
+    master["Master node<br/>B1: workers 1, 2, 3<br/>B2: workers 1, 3, 4<br/>B3: workers 2, 3, 4<br/>B4: workers 1, 2, 4"]
+    blocks -->|"each block copied 3 times"| W1["Worker 1<br/>B1 B2 B4"]
+    blocks --> W2["Worker 2<br/>B1 B3 B4"]
+    blocks --> W3["Worker 3<br/>B1 B2 B3"]
+    blocks --> W4["Worker 4<br/>B2 B3 B4"]
+    master -.-|"knows where each block is"| W1
+    master -.- W2
+    master -.- W3
+    master -.- W4
 ```
 
 Why copy every block 3 times? Because with many machines, **something always breaks**. If worker 2 stops working, every one of its blocks still exists on two other workers, and the master simply creates a new copy somewhere else. Nobody loses data, and nobody has to stop.
 
 #### Processing a file: send the code to the data
+The data traveled over the network only **once**, when the file was stored. Big data is usually written once and read many times, so the cluster avoids moving it again for every job.
+
 To process `sales.log` (for example, to compute the total sales), it would be slow to send 512 MB over the network to one machine. The cluster does the opposite: it sends the **program**, which is small, to the workers that already hold the blocks.
 
 - Each worker processes **its own block**, at the same time as the others: 4 blocks means 4 tasks running in parallel.
