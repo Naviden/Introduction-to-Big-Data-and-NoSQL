@@ -45,7 +45,7 @@ To process `sales.log` (for example, to compute the total sales), it would be sl
 
 - Each worker processes **its own block**, at the same time as the others: 4 blocks means 4 tasks running in parallel.
 - A **resource manager** decides which worker runs which task, choosing a worker that has a copy of the block, and starts the task again on another worker if one fails. It is another master role, separate from the storage master (in real clusters it often runs on its own machine).
-- At the end, the partial results of the workers are combined into the final result. How exactly they are combined is what **MapReduce** describes (see below).
+- At the end, the partial results are sent over the network to a worker that combines them into the final result (a **reduce task**). The master is not involved: it only hands out the tasks. How exactly the results are combined is what **MapReduce** describes (see below).
 
 ```mermaid
 flowchart TB
@@ -54,7 +54,7 @@ flowchart TB
     rm -->|"task: sum of B3"| W2["Worker 2<br/>B1 B3 B4"]
     rm -->|"task: sum of B2"| W3["Worker 3<br/>B1 B2 B3"]
     rm -->|"task: sum of B4"| W4["Worker 4<br/>B2 B3 B4"]
-    W1 -->|"partial sum"| total["Combine the 4 partial sums<br/>= total sales"]
+    W1 -->|"partial sum"| total["Reduce task (on one of the workers)<br/>combine the 4 partial sums<br/>= total sales"]
     W2 -->|"partial sum"| total
     W3 -->|"partial sum"| total
     W4 -->|"partial sum"| total
