@@ -81,7 +81,10 @@ flowchart TB
     end
 ```
 
-Despite the names, NameNode, DataNode, ResourceManager and NodeManager are **programs**, not machines. Every worker machine runs both a DataNode and a NodeManager: that's why a task can run on the same machine where its block is stored. In a small cluster the two master programs often run on the same machine; in a real cluster each one runs on its own machine, with a standby copy on another machine, ready to take over if it fails.
+> [!IMPORTANT]
+> Despite the names, **NameNode**, **DataNode**, **ResourceManager** and **NodeManager** are **programs**, not machines.
+
+Every worker machine runs both a DataNode and a NodeManager: that's why a task can run on the same machine where its block is stored. In a small cluster the two master programs often run on the same machine; in a real cluster each one runs on its own machine, with a standby copy on another machine, ready to take over if it fails.
 
 #### TLDR
 A big file is **split into blocks**, every block is **copied on several machines**, the **master knows where everything is**, and the work is **sent to the machines that hold the data**, which all work in parallel.
