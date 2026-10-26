@@ -38,6 +38,7 @@ jobs:
           pytest --nbmake --nbmake-timeout=900
           notebooks/redis/redis_intro.ipynb
           notebooks/parquet/columnar_parquet.ipynb
+          notebooks/spark/spark_basics_vs_pandas.ipynb
           notebooks/spark/salary_analysis_functions.ipynb
           notebooks/spark/session_data_practice.ipynb
           case-studies/retail/retail_case_study.ipynb

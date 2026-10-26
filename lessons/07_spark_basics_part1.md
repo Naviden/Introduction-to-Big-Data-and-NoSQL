@@ -18,35 +18,23 @@ In this lesson, we’ll explore how to get started with **Apache Spark** in **Da
 For this course we use **Databricks Free Edition**, which is free and does not need a credit card. (It replaced the old *Community Edition*, so you may still see that name in older tutorials.)
 
 1. Sign up at [databricks.com/learn/free-edition](https://www.databricks.com/learn/free-edition).
-2. In the left menu, click **Workspace** and then **Create > Notebook**. To use one of the notebooks of this repository, use **Import** and paste the GitHub link of the `.ipynb` file.
+2. In the left menu, click **Workspace**: this is where your notebooks are. You can create a new one with **Create > Notebook**, or import one of the course notebooks (see below).
 3. The notebook runs on **serverless compute**: you don't need to create a cluster, just run the first cell.
 4. In a Databricks notebook the variable `spark` (the `SparkSession`) already exists, so you can use it directly.
 
-### Your First Cells
-Create a new notebook and run these cells one by one (press **Shift + Enter** to run a cell).
+### The Course Notebook: Spark Basics, Compared with pandas
+Instead of typing the examples of this lesson, import the notebook [`spark_basics_vs_pandas.ipynb`](../notebooks/spark/spark_basics_vs_pandas.ipynb). It shows every basic operation twice, first in pandas and then in Spark, and loads the data by itself.
 
-**1. Check that Spark works.** This should print the numbers from 0 to 4:
+1. In Databricks, click **Workspace** in the left menu, open your home folder, and click **Import** (in the menu with the three dots, or by right-clicking the folder).
+2. Choose **URL** and paste this link:
+   ```
+   https://raw.githubusercontent.com/Naviden/Introduction-to-Big-Data-and-NoSQL/main/notebooks/spark/spark_basics_vs_pandas.ipynb
+   ```
+3. Open the imported notebook and run the cells from top to bottom (**Shift + Enter** runs a cell and moves to the next one).
 
-```python
-spark.range(5).show()
-```
+The other notebooks of the course are imported the same way: use the "raw" link of the file (`raw.githubusercontent.com/...`), not the normal GitHub page.
 
-**2. Load a dataset.** This reads the retail customers of the course directly from GitHub (more on loading data [below](#1-loading-data-into-spark)). The result should be `250`, the number of customers:
-
-```python
-import pandas as pd
-
-DATA_URL = "https://raw.githubusercontent.com/Naviden/Introduction-to-Big-Data-and-NoSQL/main/data"
-
-df = spark.createDataFrame(pd.read_csv(f"{DATA_URL}/retail/customers.csv"))
-df.count()
-```
-
-**3. Look at the data.** `display` shows an interactive table: you can sort the columns, and with the **+** button above the table you can also create a chart.
-
-```python
-display(df)
-```
+The rest of this lesson explains the same operations in more detail.
 
 ---
 
@@ -61,7 +49,7 @@ Below are some basic operations you can perform using PySpark. In the examples w
 ### 1. **Loading Data into Spark**
 The first step in any Spark application is loading data into a **DataFrame**. In PySpark, you can easily load data from various formats such as **CSV**, **Parquet**, or **Delta**.
 
-**Option A: upload the file to a volume.** In Databricks, click **Catalog**, open `workspace > default`, and create a volume (for example `course_data`). Upload the CSV files to the volume, then read them with their path:
+**Option A: upload the file to a volume.** In Databricks, click **Catalog**, open `workspace > default`, and create a volume (for example `course_data`). Upload the CSV files to the volume, then read them with their path. (If you skip this step you get the error `UC_VOLUME_NOT_FOUND`: the volume does not exist yet.)
 
 ```python
 # Load a CSV file from a Unity Catalog volume into a DataFrame
