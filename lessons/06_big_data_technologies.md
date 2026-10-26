@@ -63,12 +63,25 @@ flowchart TB
 With 1,000 workers and a 1 TB file, the idea is exactly the same: about 8,000 blocks, processed by 1,000 machines in parallel.
 
 #### The Names in Hadoop
-| Role | For storage (HDFS) | For processing (YARN) |
-|------|--------------------|-----------------------|
-| Master | **NameNode**: knows where every block is | **ResourceManager**: assigns tasks to the workers |
-| Worker | **DataNode**: stores blocks | **NodeManager**: runs tasks on its machine |
+Hadoop does the two jobs we just saw with two separate programs, each with its own master:
 
-Usually each worker machine is both a DataNode and a NodeManager: it stores blocks *and* processes them. In real clusters the master nodes also have a standby copy, ready to take over if they fail.
+- **HDFS** stores the data. Its master, the **NameNode**, knows where every block is. On each worker, a **DataNode** keeps that machine's blocks.
+- **YARN** runs the processing. Its master, the **ResourceManager**, decides which worker runs which task. On each worker, a **NodeManager** starts the tasks.
+
+```mermaid
+flowchart TB
+    NN["<b>NameNode</b> (HDFS master)<br/>knows where every block is"]
+    RM["<b>ResourceManager</b> (YARN master)<br/>decides who runs which task"]
+    NN -.-|"storage"| workers
+    RM ---|"processing"| workers
+    subgraph workers["Worker machines: each one runs a DataNode and a NodeManager"]
+        W1["<b>Worker</b><br/>DataNode: stores blocks<br/>NodeManager: runs tasks"]
+        W2["<b>Worker</b><br/>DataNode: stores blocks<br/>NodeManager: runs tasks"]
+        W3["<b>Worker</b><br/>DataNode: stores blocks<br/>NodeManager: runs tasks"]
+    end
+```
+
+So every worker machine runs both a DataNode and a NodeManager: that's why a task can run on the same machine where its block is stored. In real clusters the masters also have a standby copy, ready to take over if they fail.
 
 #### TLDR
 A big file is **split into blocks**, every block is **copied on several machines**, the **master knows where everything is**, and the work is **sent to the machines that hold the data**, which all work in parallel.
