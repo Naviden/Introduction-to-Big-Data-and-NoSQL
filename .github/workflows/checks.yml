@@ -37,6 +37,7 @@ jobs:
         run: >
           pytest --nbmake --nbmake-timeout=900
           notebooks/redis/redis_intro.ipynb
+          notebooks/mapreduce/mapreduce_word_count.ipynb
           notebooks/parquet/columnar_parquet.ipynb
           notebooks/spark/spark_basics_vs_pandas.ipynb
           notebooks/spark/salary_analysis_functions.ipynb

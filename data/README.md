@@ -12,12 +12,13 @@ All the files are small enough to be read directly from GitHub by the notebooks.
 | `urban_essentials/` | `customers.csv` | 1,000 | [Lesson 8](../lessons/08_spark_basics_part2.md) | Customers of the Urban Essentials case study |
 | `urban_essentials/` | `orders.csv` | 2,000 | Lesson 8 | Orders of those customers |
 | `airbnb/` | `AB_NYC_2019.csv` | 48,895 | [Airbnb pipeline project](../notebooks/spark/airbnb_pipeline_project.ipynb) | Airbnb listings in New York City, 2019 |
+| `misc/` | `divina_commedia_first_pages.txt` | 10 lines | [MapReduce word count](../notebooks/mapreduce/mapreduce_word_count.ipynb) | The first lines of Dante's *Divina Commedia* (public domain) |
 | `misc/` | `salary_data.csv` | 5 | [Spark functions explained](../notebooks/spark/salary_analysis_functions.ipynb) | A tiny dataset to explain Spark functions |
 | `misc/` | `session_info.csv` | 100 | [Session data practice](../notebooks/spark/session_data_practice.ipynb) | User sessions; separated by `;`, some addresses span two lines |
 | `misc/` | `1000_users.xlsx` | 1,000 | | Users (name, surname, email, address), same structure as the data generated in the Parquet notebook |
 | `misc/` | `nosql_relational_vs_key_value.xlsx` | 30 | [Lesson 4](../lessons/04_nosql_types.md) | The same user sessions in relational form and in key-value form |
 
-All the datasets are **synthetic**, except the Airbnb one.
+All the datasets are **synthetic**, except the Airbnb one and the *Divina Commedia* text.
 
 ## Airbnb data
 

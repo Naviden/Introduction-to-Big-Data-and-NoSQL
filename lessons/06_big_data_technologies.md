@@ -195,11 +195,7 @@ Some well-known stories:
 The [MapReduce Word Count tool](https://nobani.it/tools/mapreduce-wordcount) runs a word count in your browser and lets you go through it one phase at a time: **Split**, **Map**, **Shuffle**, **Reduce**. Use it to see what each phase receives and what it produces, and try it with your own text: which words end up together after the shuffle?
 
 ### Try It: MapReduce in Python
-[This notebook](https://github.com/Naviden/MapReduceExample/blob/main/Mapreduce%20Example.ipynb) implements the three phases as plain Python functions on the first pages of the *Divina Commedia*. [Open it in Colab](https://colab.research.google.com/github/Naviden/MapReduceExample/blob/main/Mapreduce%20Example.ipynb) and add this as the **first cell**, to download the text file:
-
-```
-!wget -q https://raw.githubusercontent.com/Naviden/MapReduceExample/main/divina_commedia_first_pages.txt
-```
+[This notebook](../notebooks/mapreduce/mapreduce_word_count.ipynb) implements the three phases as plain Python functions on the first lines of the *Divina Commedia*. [Open it in Colab](https://colab.research.google.com/github/Naviden/Introduction-to-Big-Data-and-NoSQL/blob/main/notebooks/mapreduce/mapreduce_word_count.ipynb) and run the cells from top to bottom: the notebook downloads the text by itself.
 
 ---
 
