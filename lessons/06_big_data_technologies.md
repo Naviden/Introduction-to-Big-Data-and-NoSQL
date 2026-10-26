@@ -89,6 +89,8 @@ Every worker machine runs both a DataNode and a NodeManager: that's why a task c
 #### TLDR
 A big file is **split into blocks**, every block is **copied on several machines**, the **master knows where everything is**, and the work is **sent to the machines that hold the data**, which all work in parallel.
 
+**Masters coordinate, workers store and compute.** The NameNode and ResourceManager run on master machines; every worker runs a DataNode and a NodeManager.
+
 ### Key Components of the Hadoop Ecosystem:
 1. **HDFS (Hadoop Distributed File System)**:
    - A distributed file system that stores data across multiple machines.
