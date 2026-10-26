@@ -173,6 +173,9 @@ Some well-known stories:
 
 > You will see the "sales per store" example again in Spark: `df.groupBy("store_id").sum("total_amount")` is exactly a map (emit store and amount), a shuffle (group by store) and a reduce (sum).
 
+### Try It: See MapReduce Step by Step
+The [MapReduce Word Count tool](https://nobani.it/tools/mapreduce-wordcount) runs a word count in your browser and lets you go through it one phase at a time: **Split**, **Map**, **Shuffle**, **Reduce**. Use it to see what each phase receives and what it produces, and try it with your own text: which words end up together after the shuffle?
+
 ### Try It: MapReduce in Python
 [This notebook](https://github.com/Naviden/MapReduceExample/blob/main/Mapreduce%20Example.ipynb) implements the three phases as plain Python functions on the first pages of the *Divina Commedia*. [Open it in Colab](https://colab.research.google.com/github/Naviden/MapReduceExample/blob/main/Mapreduce%20Example.ipynb) and add this as the **first cell**, to download the text file:
 
@@ -314,7 +317,7 @@ Hadoop = HDFS + YARN + MapReduce. Today = cloud storage + serverless compute + S
 
 ## Practice
 
-1. Write the output of the map, shuffle and reduce phases for the word count of the text `"big data is big and data is fast"`.
+1. Write the output of the map, shuffle and reduce phases for the word count of the text `"big data is big and data is fast"`. Then check your answer with the [MapReduce Word Count tool](https://nobani.it/tools/mapreduce-wordcount).
 2. Why is MapReduce slow for an algorithm that needs to read the same data 20 times (for example, training a machine learning model)? Why is Spark faster in this case?
 3. In the word count example, which phase needs to move data between the nodes of the cluster? Why is this the most expensive phase?
 4. In the `sales.log` example with 4 workers, can two workers break at the same time without losing any block? And three? (Hint: look at which workers hold each block.)
