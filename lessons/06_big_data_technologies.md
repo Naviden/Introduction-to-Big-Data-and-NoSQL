@@ -1,6 +1,6 @@
 # Big Data Technologies: Spark, Hadoop, MapReduce
 
-In this lesson, we’ll dive into the world of Big Data technologies, focusing on three powerful tools: **Hadoop**, **MapReduce**, and **Apache Spark**. Each of these technologies plays a crucial role in handling large-scale data processing across distributed systems.
+In this lesson, we’ll dive into the world of Big Data technologies, focusing on three powerful tools: [**Hadoop**](https://hadoop.apache.org/), [**MapReduce**](https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters/), and [**Apache Spark**](https://spark.apache.org/). Each of these technologies plays a crucial role in handling large-scale data processing across distributed systems.
 
 ---
 
@@ -65,8 +65,8 @@ With 1,000 workers and a 1 TB file, the idea is exactly the same: about 8,000 bl
 #### The Names in Hadoop
 Hadoop does the two jobs we just saw with two separate programs, each with its own master:
 
-- **HDFS** stores the data. Its master, the **NameNode**, knows where every block is. On each worker, a **DataNode** keeps that machine's blocks.
-- **YARN** runs the processing. Its master, the **ResourceManager**, decides which worker runs which task. On each worker, a **NodeManager** starts the tasks.
+- [**HDFS**](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html) stores the data. Its master, the [**NameNode**](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html#NameNode_and_DataNodes), knows where every block is. On each worker, a [**DataNode**](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html#NameNode_and_DataNodes) keeps that machine's blocks.
+- [**YARN**](https://hadoop.apache.org/docs/stable/hadoop-yarn/hadoop-yarn-site/YARN.html) runs the processing. Its master, the [**ResourceManager**](https://hadoop.apache.org/docs/stable/hadoop-yarn/hadoop-yarn-site/YARN.html), decides which worker runs which task. On each worker, a [**NodeManager**](https://hadoop.apache.org/docs/stable/hadoop-yarn/hadoop-yarn-site/YARN.html) starts the tasks.
 
 ```mermaid
 flowchart TB
@@ -103,11 +103,11 @@ A big file is **split into blocks**, every block is **copied on several machines
 3. **MapReduce**:
    - A programming model for processing large datasets in parallel across a Hadoop cluster (discussed in detail below).
    
-4. **Hive**:
+4. [**Hive**](https://hive.apache.org/):
    - A data warehouse tool that provides SQL-like query capabilities on top of Hadoop.
    
-5. **Pig**:
-   - Apache Pig is a high-level platform for processing and analyzing large datasets within the Hadoop ecosystem. It uses a scripting language called **Pig Latin**, and Pig Latin scripts are automatically translated into sequences of MapReduce jobs that run on the Hadoop cluster. The name was chosen because, much like a pig that can consume a wide variety of foods, Apache Pig is designed to handle any kind of data, whether structured, semi-structured, or unstructured. This flexibility allows users to process diverse datasets without concern for their format [(source)](https://www.guru99.com/introduction-to-pig-and-hive.html). Today Pig is rarely used for new projects: Spark and SQL engines like Hive have mostly replaced it.
+5. [**Pig**](https://pig.apache.org/):
+   - Apache Pig is a high-level platform for processing and analyzing large datasets within the Hadoop ecosystem. It uses a scripting language called [**Pig Latin**](https://pig.apache.org/docs/latest/basic.html), and Pig Latin scripts are automatically translated into sequences of MapReduce jobs that run on the Hadoop cluster. The name was chosen because, much like a pig that can consume a wide variety of foods, Apache Pig is designed to handle any kind of data, whether structured, semi-structured, or unstructured. This flexibility allows users to process diverse datasets without concern for their format [(source)](https://www.guru99.com/introduction-to-pig-and-hive.html). Today Pig is rarely used for new projects: Spark and SQL engines like Hive have mostly replaced it.
 
 ---
 
@@ -187,7 +187,7 @@ Word count is the "hello world" of MapReduce, but the same pattern solves many r
 Some well-known stories:
 - **Yahoo** ran one of the largest early Hadoop clusters to build its "Webmap", a graph of the whole web used by its search engine.
 - **Facebook** built its data warehouse on Hadoop and created **Hive**, so that analysts could write SQL that runs as MapReduce jobs.
-- **The New York Times** (2007) used Hadoop on rented Amazon servers to convert about 11 million scanned historical articles into PDFs in about one day. Here the map phase does the conversion and almost no reduce is needed.
+- **The New York Times** (2007) used Hadoop on rented Amazon servers to convert about 11 million scanned historical articles into PDFs in about one day ([source](https://open.blogs.nytimes.com/2007/11/01/self-service-prorated-super-computing-fun/)). Here the map phase does the conversion and almost no reduce is needed.
 
 > You will see the "sales per store" example again in Spark: `df.groupBy("store_id").sum("total_amount")` is exactly a map (emit store and amount), a shuffle (group by store) and a reduce (sum).
 
@@ -226,7 +226,7 @@ The [MapReduce Word Count tool](https://nobani.it/tools/mapreduce-wordcount) run
 - **Strengths**:
   - **In-Memory Processing**: Spark keeps intermediate data in memory whenever possible, reducing the need for disk I/O and significantly improving performance. (Spark still writes to disk during a shuffle, and when the data does not fit in memory.)
   - **Versatile APIs**: Supports a wide range of languages (Scala, Python, Java, R) and provides high-level APIs for data processing.
-  - **Broad Use Cases**: Spark can handle batch processing, near real-time streaming (Structured Streaming), machine learning (MLlib), and graph processing (GraphX in Scala, or the GraphFrames package in Python).
+  - **Broad Use Cases**: Spark can handle batch processing, near real-time streaming ([Structured Streaming](https://spark.apache.org/docs/latest/streaming/index.html)), machine learning ([MLlib](https://spark.apache.org/mllib/)), and graph processing ([GraphX](https://spark.apache.org/graphx/) in Scala, or the [GraphFrames](https://graphframes.io/) package in Python).
   - **Iterative Computations**: Ideal for algorithms that require multiple passes over the same data, such as machine learning and graph algorithms.
   
 - **Limitations**:
@@ -244,7 +244,7 @@ The [MapReduce Word Count tool](https://nobani.it/tools/mapreduce-wordcount) run
 | **Ease of Use**             | Low-level API, harder to code        | High-level API, easier to code         |
 | **Use Cases**               | Batch jobs                           | Batch, Streaming, Machine Learning     |
 | **Fault Tolerance**         | High (reruns failed tasks)           | High (via lineage and DAG recovery)    |
-| **Language Support**        | Java (other languages through Hadoop Streaming) | Scala, Python, Java, R, SQL   |
+| **Language Support**        | Java (other languages through [Hadoop Streaming](https://hadoop.apache.org/docs/stable/hadoop-streaming/HadoopStreaming.html)) | Scala, Python, Java, R, SQL   |
 | **Resource Efficiency**     | Lower memory requirements            | Higher memory usage                    |
 
 ---
@@ -268,17 +268,17 @@ In practice, almost all new projects use Spark (or similar engines). MapReduce i
 ### TLDR
 Spark and MapReduce are both powerful tools for distributed data processing, but they serve different purposes. Spark excels in speed, versatility, and ease of use, while MapReduce is more suited for large-scale, batch-oriented tasks with limited memory requirements.
 ### Spark Core Concepts:
-- **RDD (Resilient Distributed Datasets)**:
+- [**RDD (Resilient Distributed Datasets)**](https://spark.apache.org/docs/latest/rdd-programming-guide.html):
   - An abstraction for distributed memory. RDDs allow you to perform transformations (e.g., map, filter) and actions (e.g., count, collect) on large datasets.
   
-- **Spark SQL**:
+- [**Spark SQL**](https://spark.apache.org/docs/latest/sql-programming-guide.html):
   - A module for working with structured data using SQL queries.
   
 - **DataFrames**:
   - A distributed table with named columns, built on top of RDDs. This is the API you will use most of the time, and the one we use in the next lessons.
 
 - **Structured Streaming**:
-  - The streaming engine of Spark. You write the same DataFrame code you would write for a batch job, and Spark runs it on data that keeps arriving (e.g., from Apache Kafka or from new files landing in a folder). It replaces the older **Spark Streaming** (DStreams) API, which is now considered legacy.
+  - The streaming engine of Spark. You write the same DataFrame code you would write for a batch job, and Spark runs it on data that keeps arriving (e.g., from [Apache Kafka](https://kafka.apache.org/) or from new files landing in a folder). It replaces the older [**Spark Streaming**](https://spark.apache.org/docs/latest/streaming-programming-guide.html) (DStreams) API, which is now considered legacy.
 
 ---
 
@@ -303,9 +303,9 @@ timeline
     2025 : Spark 4.0 (Apache, led by Databricks)
 ```
 
-- **2003-2004**: Google publishes how it works. Hadoop is an open-source copy of these two ideas: GFS became **HDFS**, Google's MapReduce became **Hadoop MapReduce**.
+- **2003-2004**: Google publishes how it works. Hadoop is an open-source copy of these two ideas: [GFS](https://research.google/pubs/the-google-file-system/) became **HDFS**, Google's MapReduce became **Hadoop MapReduce**.
 - **2006-2013**: the Hadoop era. Companies like Yahoo and Facebook run huge Hadoop clusters, and tools like Hive make them easier to use.
-- **2014 onwards**: Spark replaces MapReduce as the processing engine, and the data moves to cloud storage (S3 and similar). Databricks, founded by the creators of Spark, builds a platform around it.
+- **2014 onwards**: Spark replaces MapReduce as the processing engine, and the data moves to cloud storage ([S3](https://aws.amazon.com/s3/) and similar). [Databricks](https://www.databricks.com/), founded by the creators of Spark, builds a platform around it.
 
 ---
 
@@ -315,18 +315,18 @@ Hadoop is still running in many large companies, but almost no new project start
 
 | Hadoop component | What it did | Modern alternative |
 |------------------|-------------|--------------------|
-| **HDFS** | distributed file storage | Cloud object storage: Amazon S3, Azure Data Lake Storage, Google Cloud Storage |
-| **YARN** | gives cluster resources to jobs | Kubernetes, or serverless compute managed by the platform |
-| **MapReduce** | batch processing | Apache Spark; Apache Flink for real-time streaming |
-| **Hive** | SQL on top of Hadoop | Cloud data warehouses and SQL engines: Snowflake, Google BigQuery, Databricks SQL, Trino |
-| **Hive tables** | tables on top of files | Open table formats: Delta Lake, Apache Iceberg, Apache Hudi |
+| **HDFS** | distributed file storage | Cloud object storage: Amazon S3, [Azure Data Lake Storage](https://azure.microsoft.com/en-us/products/storage/data-lake-storage/), [Google Cloud Storage](https://cloud.google.com/storage) |
+| **YARN** | gives cluster resources to jobs | [Kubernetes](https://kubernetes.io/), or serverless compute managed by the platform |
+| **MapReduce** | batch processing | Apache Spark; [Apache Flink](https://flink.apache.org/) for real-time streaming |
+| **Hive** | SQL on top of Hadoop | Cloud data warehouses and SQL engines: [Snowflake](https://www.snowflake.com/), [Google BigQuery](https://cloud.google.com/bigquery), [Databricks SQL](https://www.databricks.com/product/databricks-sql), [Trino](https://trino.io/) |
+| **Hive tables** | tables on top of files | Open table formats: [Delta Lake](https://delta.io/), [Apache Iceberg](https://iceberg.apache.org/), [Apache Hudi](https://hudi.apache.org/) |
 | **Pig** | scripts for data pipelines | Spark (Python or SQL) |
-| **Oozie** | scheduling pipelines | Apache Airflow, Dagster |
-| **HBase** | NoSQL database on Hadoop | Cassandra, Google Bigtable, Amazon DynamoDB |
+| [**Oozie**](https://oozie.apache.org/) | scheduling pipelines | [Apache Airflow](https://airflow.apache.org/), [Dagster](https://dagster.io/) |
+| [**HBase**](https://hbase.apache.org/) | NoSQL database on Hadoop | [Cassandra](https://cassandra.apache.org/), [Google Bigtable](https://cloud.google.com/bigtable), [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) |
 
-The files under a Delta or Iceberg table are **Parquet** files: a columnar, compressed format, so Spark can read only the columns a query needs. (The optional [Parquet notebook](../notebooks/parquet/columnar_parquet.ipynb) compares Parquet with CSV and Excel.)
+The files under a Delta or Iceberg table are [**Parquet**](https://parquet.apache.org/) files: a columnar, compressed format, so Spark can read only the columns a query needs. (The optional [Parquet notebook](../notebooks/parquet/columnar_parquet.ipynb) compares Parquet with CSV and Excel.)
 
-Most companies use a managed platform that puts these pieces together, for example **Databricks** (Spark and Delta Lake on cloud storage, the platform we use in the next lessons), Snowflake, Google BigQuery, or managed Spark services like AWS EMR.
+Most companies use a managed platform that puts these pieces together, for example **Databricks** (Spark and Delta Lake on cloud storage, the platform we use in the next lessons), Snowflake, Google BigQuery, or managed Spark services like [AWS EMR](https://aws.amazon.com/emr/).
 
 #### TLDR
 Hadoop = HDFS + YARN + MapReduce. Today = cloud storage + serverless compute + Spark, with a table format like Delta on top.
