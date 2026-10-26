@@ -88,9 +88,33 @@ Final Output:
 - **Reduce Phase**: Aggregates the grouped data to produce the final result.
 
 This structured approach allows for efficient, parallel processing of large datasets, making MapReduce a powerful tool in big data analytics.
-### Use Case for MapReduce:
-- **Log Analysis**: MapReduce can process massive server logs to analyze patterns, detect anomalies, or compute metrics like the number of visitors to a website.
-[(See simple implementation of MapReduce done in Python)](https://github.com/Naviden/MapReduceExample/blob/main/Mapreduce%20Example.ipynb)
+### Real-World Examples of MapReduce
+Word count is the "hello world" of MapReduce, but the same pattern solves many real problems. The trick is always to decide **what the key is**: the map phase emits `(key, value)` pairs, and the reduce phase combines all the values of the same key.
+
+| Use case | Map emits | Reduce computes |
+|----------|-----------|-----------------|
+| **Web search index** (Google built its search index with MapReduce) | `(word, page_url)` for every word of every page | for each word, the list of pages that contain it |
+| **Website traffic** from server logs | `(url, 1)` for every request | number of visits per page |
+| **Who links to me?** (used to rank web pages) | `(target_page, source_page)` for every link | for each page, the list of pages linking to it |
+| **Sales per store** | `(store_id, amount)` for every receipt | total revenue per store |
+| **Highest temperature per year** | `(year, temperature)` for every weather reading | maximum temperature per year |
+| **Errors per hour** in system logs | `(hour, 1)` for every line containing `ERROR` | number of errors per hour |
+| **"Bought together"** recommendations | `((product_X, product_Y), 1)` for every pair in the same basket | how often two products are bought together |
+
+Some well-known stories:
+- **Yahoo** ran one of the largest early Hadoop clusters to build its "Webmap", a graph of the whole web used by its search engine.
+- **Facebook** built its data warehouse on Hadoop and created **Hive**, so that analysts could write SQL that runs as MapReduce jobs.
+- **The New York Times** (2007) used Hadoop on rented Amazon servers to convert about 11 million scanned historical articles into PDFs in about one day. Here the map phase does the conversion and almost no reduce is needed.
+
+> You will see the "sales per store" example again in Spark: `df.groupBy("store_id").sum("total_amount")` is exactly a map (emit store and amount), a shuffle (group by store) and a reduce (sum).
+
+### Try It: MapReduce in Python
+[This notebook](https://github.com/Naviden/MapReduceExample/blob/main/Mapreduce%20Example.ipynb) implements the three phases as plain Python functions on the first pages of the *Divina Commedia*. [Open it in Colab](https://colab.research.google.com/github/Naviden/MapReduceExample/blob/main/Mapreduce%20Example.ipynb) and add this as the **first cell**, to download the text file:
+
+```
+!wget -q https://raw.githubusercontent.com/Naviden/MapReduceExample/main/divina_commedia_first_pages.txt
+```
+
 ---
 
 ## Apache Spark: A Powerful Successor to MapReduce
@@ -172,8 +196,33 @@ Spark and MapReduce are both powerful tools for distributed data processing, but
 
 ---
 
+## Hadoop Today: The Modern Alternatives
+
+Hadoop is still running in many large companies, but almost no new project starts on it. The biggest change is that **storage and compute are now separate**: in Hadoop the same machines stored the data (HDFS) and processed it, so to get more of one you had to buy more of both. Today the data stays in cheap cloud storage, and compute is turned on only while a job runs.
+
+| Hadoop component | What it did | Modern alternative |
+|------------------|-------------|--------------------|
+| **HDFS** | distributed file storage | Cloud object storage: Amazon S3, Azure Data Lake Storage, Google Cloud Storage |
+| **YARN** | gives cluster resources to jobs | Kubernetes, or serverless compute managed by the platform |
+| **MapReduce** | batch processing | Apache Spark; Apache Flink for real-time streaming |
+| **Hive** | SQL on top of Hadoop | Cloud data warehouses and SQL engines: Snowflake, Google BigQuery, Databricks SQL, Trino |
+| **Hive tables** | tables on top of files | Open table formats: Delta Lake, Apache Iceberg, Apache Hudi |
+| **Pig** | scripts for data pipelines | Spark (Python or SQL) |
+| **Oozie** | scheduling pipelines | Apache Airflow, Dagster |
+| **HBase** | NoSQL database on Hadoop | Cassandra, Google Bigtable, Amazon DynamoDB |
+
+The files under a Delta or Iceberg table are **Parquet** files: a columnar, compressed format, so Spark can read only the columns a query needs. (The optional [Parquet notebook](../notebooks/parquet/columnar_parquet.ipynb) compares Parquet with CSV and Excel.)
+
+Most companies use a managed platform that puts these pieces together, for example **Databricks** (Spark and Delta Lake on cloud storage, the platform we use in the next lessons), Snowflake, Google BigQuery, or managed Spark services like AWS EMR.
+
+#### TLDR
+Hadoop = HDFS + YARN + MapReduce. Today = cloud storage + serverless compute + Spark, with a table format like Delta on top.
+
+---
+
 ## Practice
 
 1. Write the output of the map, shuffle and reduce phases for the word count of the text `"big data is big and data is fast"`.
 2. Why is MapReduce slow for an algorithm that needs to read the same data 20 times (for example, training a machine learning model)? Why is Spark faster in this case?
 3. In the word count example, which phase needs to move data between the nodes of the cluster? Why is this the most expensive phase?
+4. An online shop wants the average rating of each product from millions of reviews. What does the map phase emit, and what does the reduce phase compute?
