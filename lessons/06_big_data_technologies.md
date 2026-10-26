@@ -8,6 +8,56 @@ In this lesson, we’ll dive into the world of Big Data technologies, focusing o
 
 **Hadoop** is an open-source framework designed for the distributed storage and processing of large datasets across clusters of computers. Hadoop is highly scalable and fault-tolerant, making it a backbone technology for Big Data solutions.
 
+### How a Cluster Works
+
+A **cluster** is a group of ordinary computers (called **nodes**) connected by a network, that work together as if they were one big computer. There are two roles:
+
+- **Master node**: the coordinator. It does not store the data itself, it knows *where* the data is and decides *who* does what.
+- **Worker nodes**: they store the data and do the actual work. A cluster can have from a few to thousands of workers.
+
+#### Storing a file: split and copy
+Imagine a 512 MB file of sales, `sales.log`. Instead of saving it on one machine, the cluster:
+
+1. **Splits** it into blocks of the same size (in Hadoop, 128 MB by default): here 4 blocks, B1 to B4.
+2. **Copies** every block on 3 different workers (this is called **replication**).
+3. **Remembers** on the master which block is on which worker.
+
+```mermaid
+flowchart TB
+    file["sales.log (512 MB)"] -->|"split into 4 blocks of 128 MB"| blocks["B1, B2, B3, B4"]
+    master["Master node<br/>B1: workers 1, 2, 3<br/>B2: workers 1, 3, 4<br/>B3: workers 2, 3, 4<br/>B4: workers 1, 2, 4"]
+    blocks -->|"each block copied 3 times"| W1["Worker 1<br/>B1 B2 B4"]
+    blocks --> W2["Worker 2<br/>B1 B3 B4"]
+    blocks --> W3["Worker 3<br/>B1 B2 B3"]
+    blocks --> W4["Worker 4<br/>B2 B3 B4"]
+    master -.-|"knows where each block is"| W1
+    master -.- W2
+    master -.- W3
+    master -.- W4
+```
+
+Why copy every block 3 times? Because with many machines, **something always breaks**. If worker 2 stops working, every one of its blocks still exists on two other workers, and the master simply creates a new copy somewhere else. Nobody loses data, and nobody has to stop.
+
+#### Processing a file: send the code to the data
+To process `sales.log` (for example, to compute the total sales), it would be slow to send 512 MB over the network to one machine. The cluster does the opposite: it sends the **program**, which is small, to the workers that already hold the blocks.
+
+- Each worker processes **its own block**, at the same time as the others: 4 blocks means 4 tasks running in parallel.
+- A **resource manager** on the master decides which worker runs which task, choosing a worker that has a copy of the block, and starts the task again on another worker if one fails.
+- At the end, the partial results of the workers are combined into the final result. How exactly they are combined is what **MapReduce** describes (see below).
+
+With 1,000 workers and a 1 TB file, the idea is exactly the same: about 8,000 blocks, processed by 1,000 machines in parallel.
+
+#### The Names in Hadoop
+| Role | For storage (HDFS) | For processing (YARN) |
+|------|--------------------|-----------------------|
+| Master | **NameNode**: knows where every block is | **ResourceManager**: assigns tasks to the workers |
+| Worker | **DataNode**: stores blocks | **NodeManager**: runs tasks on its machine |
+
+Usually each worker machine is both a DataNode and a NodeManager: it stores blocks *and* processes them. In real clusters the master nodes also have a standby copy, ready to take over if they fail.
+
+#### TLDR
+A big file is **split into blocks**, every block is **copied on several machines**, the **master knows where everything is**, and the work is **sent to the machines that hold the data**, which all work in parallel.
+
 ### Key Components of the Hadoop Ecosystem:
 1. **HDFS (Hadoop Distributed File System)**:
    - A distributed file system that stores data across multiple machines.
@@ -225,4 +275,6 @@ Hadoop = HDFS + YARN + MapReduce. Today = cloud storage + serverless compute + S
 1. Write the output of the map, shuffle and reduce phases for the word count of the text `"big data is big and data is fast"`.
 2. Why is MapReduce slow for an algorithm that needs to read the same data 20 times (for example, training a machine learning model)? Why is Spark faster in this case?
 3. In the word count example, which phase needs to move data between the nodes of the cluster? Why is this the most expensive phase?
-4. An online shop wants the average rating of each product from millions of reviews. What does the map phase emit, and what does the reduce phase compute?
+4. In the `sales.log` example with 4 workers, can two workers break at the same time without losing any block? And three? (Hint: look at which workers hold each block.)
+5. How many blocks does a 1 GB file have with blocks of 128 MB? With replication 3, how much disk space does it use in the cluster?
+6. An online shop wants the average rating of each product from millions of reviews. What does the map phase emit, and what does the reduce phase compute?
