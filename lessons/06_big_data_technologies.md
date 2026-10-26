@@ -25,7 +25,7 @@ Imagine a 512 MB file of sales, `sales.log`. Instead of saving it on one machine
 ```mermaid
 flowchart TB
     file["sales.log (512 MB)"] -->|"split into 4 blocks of 128 MB"| blocks["B1, B2, B3, B4"]
-    master["Master node<br/>B1: workers 1, 2, 3<br/>B2: workers 1, 3, 4<br/>B3: workers 2, 3, 4<br/>B4: workers 1, 2, 4"]
+    master["Storage master (NameNode)<br/>B1: workers 1, 2, 3<br/>B2: workers 1, 3, 4<br/>B3: workers 2, 3, 4<br/>B4: workers 1, 2, 4"]
     blocks -->|"each block copied 3 times"| W1["Worker 1<br/>B1 B2 B4"]
     blocks --> W2["Worker 2<br/>B1 B3 B4"]
     blocks --> W3["Worker 3<br/>B1 B2 B3"]
@@ -44,8 +44,21 @@ The data traveled over the network only **once**, when the file was stored. Big 
 To process `sales.log` (for example, to compute the total sales), it would be slow to send 512 MB over the network to one machine. The cluster does the opposite: it sends the **program**, which is small, to the workers that already hold the blocks.
 
 - Each worker processes **its own block**, at the same time as the others: 4 blocks means 4 tasks running in parallel.
-- A **resource manager** on the master decides which worker runs which task, choosing a worker that has a copy of the block, and starts the task again on another worker if one fails.
+- A **resource manager** decides which worker runs which task, choosing a worker that has a copy of the block, and starts the task again on another worker if one fails. It is another master role, separate from the storage master (in real clusters it often runs on its own machine).
 - At the end, the partial results of the workers are combined into the final result. How exactly they are combined is what **MapReduce** describes (see below).
+
+```mermaid
+flowchart TB
+    rm["Resource manager<br/>(processing master)"]
+    rm -->|"task: sum of B1"| W1["Worker 1<br/>B1 B2 B4"]
+    rm -->|"task: sum of B3"| W2["Worker 2<br/>B1 B3 B4"]
+    rm -->|"task: sum of B2"| W3["Worker 3<br/>B1 B2 B3"]
+    rm -->|"task: sum of B4"| W4["Worker 4<br/>B2 B3 B4"]
+    W1 -->|"partial sum"| total["Combine the 4 partial sums<br/>= total sales"]
+    W2 -->|"partial sum"| total
+    W3 -->|"partial sum"| total
+    W4 -->|"partial sum"| total
+```
 
 With 1,000 workers and a 1 TB file, the idea is exactly the same: about 8,000 blocks, processed by 1,000 machines in parallel.
 
