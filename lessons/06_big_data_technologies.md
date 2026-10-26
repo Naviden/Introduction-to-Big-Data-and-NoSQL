@@ -289,18 +289,18 @@ The technologies of this lesson did not appear all at once. It all started with 
 ```mermaid
 timeline
     title Big data processing, from Google to today
-    2003 : Google File System paper
+    2003 : Google File System paper (Google)
     2004 : MapReduce paper (Google)
-    2006 : Hadoop is born (HDFS + MapReduce)
-         : Amazon S3 cloud storage
+    2006 : Hadoop is born, HDFS + MapReduce (Apache, backed by Yahoo)
+         : S3 cloud storage (Amazon)
     2008 : Hive, SQL on Hadoop (Facebook)
-    2009 : Spark starts at UC Berkeley
-    2013 : YARN (Hadoop 2)
-         : Databricks is founded
-    2014 : Spark 1.0
-    2016 : Spark 2.0 and Structured Streaming
-    2019 : Delta Lake
-    2025 : Spark 4.0
+    2009 : Spark starts at UC Berkeley (AMPLab research lab)
+    2013 : YARN, Hadoop 2 (Yahoo and Hortonworks)
+         : Databricks is founded (by the creators of Spark)
+    2014 : Spark 1.0 (Apache, led by Databricks)
+    2016 : Spark 2.0 and Structured Streaming (Apache, led by Databricks)
+    2019 : Delta Lake (Databricks)
+    2025 : Spark 4.0 (Apache, led by Databricks)
 ```
 
 - **2003-2004**: Google publishes how it works. Hadoop is an open-source copy of these two ideas: GFS became **HDFS**, Google's MapReduce became **Hadoop MapReduce**.
