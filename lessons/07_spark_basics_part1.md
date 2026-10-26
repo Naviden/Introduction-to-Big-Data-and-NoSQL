@@ -22,6 +22,32 @@ For this course we use **Databricks Free Edition**, which is free and does not n
 3. The notebook runs on **serverless compute**: you don't need to create a cluster, just run the first cell.
 4. In a Databricks notebook the variable `spark` (the `SparkSession`) already exists, so you can use it directly.
 
+### Your First Cells
+Create a new notebook and run these cells one by one (press **Shift + Enter** to run a cell).
+
+**1. Check that Spark works.** This should print the numbers from 0 to 4:
+
+```python
+spark.range(5).show()
+```
+
+**2. Load a dataset.** This reads the retail customers of the course directly from GitHub (more on loading data [below](#1-loading-data-into-spark)). The result should be `250`, the number of customers:
+
+```python
+import pandas as pd
+
+DATA_URL = "https://raw.githubusercontent.com/Naviden/Introduction-to-Big-Data-and-NoSQL/main/data"
+
+df = spark.createDataFrame(pd.read_csv(f"{DATA_URL}/retail/customers.csv"))
+df.count()
+```
+
+**3. Look at the data.** `display` shows an interactive table: you can sort the columns, and with the **+** button above the table you can also create a chart.
+
+```python
+display(df)
+```
+
 ---
 
 ## Basic Operations in Spark
