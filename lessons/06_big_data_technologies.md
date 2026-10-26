@@ -25,15 +25,14 @@ Imagine a 512 MB file of sales, `sales.log`. Instead of saving it on one machine
 ```mermaid
 flowchart TB
     file["sales.log (512 MB)"] -->|"split into 4 blocks of 128 MB"| blocks["B1, B2, B3, B4"]
-    master["Master node<br/>B1: workers 1, 2, 3<br/>B2: workers 1, 3, 4<br/>B3: workers 2, 3, 4<br/>B4: workers 1, 2, 4"]
-    blocks -->|"each block copied 3 times"| W1["Worker 1<br/>B1 B2 B4"]
-    blocks --> W2["Worker 2<br/>B1 B3 B4"]
-    blocks --> W3["Worker 3<br/>B1 B2 B3"]
-    blocks --> W4["Worker 4<br/>B2 B3 B4"]
-    master -.-|"knows where each block is"| W1
-    master -.- W2
-    master -.- W3
-    master -.- W4
+    blocks -->|"each block is copied on 3 workers"| workers
+    master["Master node<br/>B1: workers 1, 2, 3<br/>B2: workers 1, 3, 4<br/>B3: workers 2, 3, 4<br/>B4: workers 1, 2, 4"] -.-|"knows where each block is"| workers
+    subgraph workers["Worker nodes"]
+        W1["Worker 1<br/>B1 B2 B4"]
+        W2["Worker 2<br/>B1 B3 B4"]
+        W3["Worker 3<br/>B1 B2 B3"]
+        W4["Worker 4<br/>B2 B3 B4"]
+    end
 ```
 
 Why copy every block 3 times? Because with many machines, **something always breaks**. If worker 2 stops working, every one of its blocks still exists on two other workers, and the master simply creates a new copy somewhere else. Nobody loses data, and nobody has to stop.
@@ -243,6 +242,33 @@ Spark and MapReduce are both powerful tools for distributed data processing, but
 
 - **Structured Streaming**:
   - The streaming engine of Spark. You write the same DataFrame code you would write for a batch job, and Spark runs it on data that keeps arriving (e.g., from Apache Kafka or from new files landing in a folder). It replaces the older **Spark Streaming** (DStreams) API, which is now considered legacy.
+
+---
+
+## A Short History
+
+The technologies of this lesson did not appear all at once. It all started with two papers in which Google described how it stored and processed the whole web on thousands of cheap machines.
+
+```mermaid
+timeline
+    title Big data processing, from Google to today
+    2003 : Google File System paper
+    2004 : MapReduce paper (Google)
+    2006 : Hadoop is born (HDFS + MapReduce)
+         : Amazon S3 cloud storage
+    2008 : Hive, SQL on Hadoop (Facebook)
+    2009 : Spark starts at UC Berkeley
+    2013 : YARN (Hadoop 2)
+         : Databricks is founded
+    2014 : Spark 1.0
+    2016 : Spark 2.0 and Structured Streaming
+    2019 : Delta Lake
+    2025 : Spark 4.0
+```
+
+- **2003-2004**: Google publishes how it works. Hadoop is an open-source copy of these two ideas: GFS became **HDFS**, Google's MapReduce became **Hadoop MapReduce**.
+- **2006-2013**: the Hadoop era. Companies like Yahoo and Facebook run huge Hadoop clusters, and tools like Hive make them easier to use.
+- **2014 onwards**: Spark replaces MapReduce as the processing engine, and the data moves to cloud storage (S3 and similar). Databricks, founded by the creators of Spark, builds a platform around it.
 
 ---
 
