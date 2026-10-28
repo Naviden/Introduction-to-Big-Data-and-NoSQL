@@ -17,6 +17,7 @@ __pycache__/
 
 # files created when running the notebooks
 users_info.*
+taxi_data/
 spark-warehouse/
 metastore_db/
 derby.log
