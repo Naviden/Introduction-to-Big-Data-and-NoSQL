@@ -78,7 +78,8 @@ sequenceDiagram
     C-->>D: list of files
     D->>D: 3. plan: 2 columns of 19, split into tasks
     D->>W: 4. one task per piece of data
-    W->>S: 5. each worker reads its pieces (only 2 columns)
+    W->>S: 5. each worker asks for its pieces (only 2 columns)
+    S-->>W: the data of those 2 columns
     W->>W: 6. partial results, then shuffle by payment_type
     W-->>D: 7. final result (6 rows)
     D-->>N: the table you see under the cell
