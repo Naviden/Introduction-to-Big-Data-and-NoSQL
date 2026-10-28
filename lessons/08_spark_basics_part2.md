@@ -2,6 +2,15 @@
 
 In this lesson, we’ll continue exploring Apache Spark in Databricks by diving into more advanced Spark operations such as **joins**, **aggregations**, and **window functions**. We will also compare working with **Spark DataFrames** and **RDDs**.
 
+### The Course Notebook: Window Functions, Spark SQL and Delta Lake
+The notebook [`windows_sql_delta.ipynb`](../notebooks/spark/windows_sql_delta.ipynb) goes through the window functions of this lesson with the Urban Essentials data, then shows the same queries in **SQL**, and finally saves the data as a **Delta Lake** table that you can update, look at in the past (time travel) and restore. Import it in Databricks (**Workspace > Import > URL**) with this link:
+
+```
+https://raw.githubusercontent.com/Naviden/Introduction-to-Big-Data-and-NoSQL/main/notebooks/spark/windows_sql_delta.ipynb
+```
+
+The Delta Lake part needs Databricks; the rest also runs locally or on Colab.
+
 # Case Study: Urban Essentials
 
 **Urban Essentials** is a mid-sized e-commerce company specializing in the sale of everyday products such as household items, personal care, and electronics. The company focuses on providing a seamless online shopping experience, offering a wide range of affordable and high-quality products to customers across various cities.
