@@ -322,7 +322,7 @@ Hadoop is still running in many large companies, but almost no new project start
 
 The files under a Delta or Iceberg table are [**Parquet**](https://parquet.apache.org/) files: a columnar, compressed format, so Spark can read only the columns a query needs. (The optional [Parquet notebook](../notebooks/parquet/columnar_parquet.ipynb) compares Parquet with CSV and Excel.)
 
-Most companies use a managed platform that puts these pieces together, for example **Databricks** (Spark and Delta Lake on cloud storage, the platform we use in the next lessons), Snowflake, Google BigQuery, or managed Spark services like [AWS EMR](https://aws.amazon.com/emr/).
+Most companies use a managed platform that puts these pieces together, for example **Databricks** (Spark and Delta Lake on cloud storage, the platform we use in the next lessons; [Lesson 9](09_inside_databricks.md) shows how it works inside), Snowflake, Google BigQuery, or managed Spark services like [AWS EMR](https://aws.amazon.com/emr/).
 
 #### TLDR
 Hadoop = HDFS + YARN + MapReduce. Today = cloud storage + serverless compute + Spark, with a table format like Delta on top.
